@@ -1,3 +1,7 @@
+<?php
+    $page = new Page();
+    $page->load_by_id($this->get_parameter());
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="<?php echo $this->template_path; ?>/images/favicon.ico">
-    <title>RabbitCMS :: Pages</title>
+    <title>RabbitCMS :: Edit page</title>
     <!-- Bootstrap core CSS -->
     <link href="<?php echo $this->template_path; ?>/css/bootstrap.min.css" rel="stylesheet">
 	<link href="<?php echo $this->template_path; ?>/css/custom.css" rel="stylesheet">
@@ -19,7 +23,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
   <body>
 
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -56,31 +59,28 @@
     <div class="container">
 
 	<div class="panel panel-default">
-		<div class="panel-heading">Pages</div>
+		<div class="panel-heading">Edit page</div>
 		<div class="panel-body">
-			<a class='btn btn-default' href="add-page">Add page</a>
+                    <form role="form" action="../pages" method="post">
+                        <div class="form-group">
+                          <label>Page title:</label>
+                          <input name="title" value="<?php echo $page->get_title(); ?>" type="text" class="form-control" placeholder='For example, "How to loose weight"...'>
+                        </div>
+                        <div class="form-group">
+                          <label>URL-name of the page:</label>
+                          <input name="url" value="<?php echo $page->get_url(); ?>" type="text" class="form-control" placeholder='For example, "how-to-loose-weight"'>
+                          <p class="help-block">You will got: http://site.com/how-to-loose-weight</p>
+                        </div>
+                        <div class="form-group">
+                          <label>Text of the page:</label>
+                          <textarea name="text" class="form-control" rows="15"><?php echo $page->get_text(); ?></textarea>
+                        </div>
+                        <input type="hidden" name="action-module" value="page" />
+                        <input type="hidden" name="action-method" value="update-page" />
+                        <input type="hidden" name="id" value="<?php echo $page->get_id(); ?>" />
+                        <button type="submit" class="btn btn-default">Save</button>
+                    </form>
 		</div>
-		<table class="table table-striped" id="prjects-list-table">
-			<thead>
-				<th>Title</th>
-				<th>URL</th>
-				<th>Control</th>
-			</thead>
-			<tbody>
-<?php
-$pages = Database::get_pages();
-if (count($pages) > 0) {
-	foreach ($pages as $page) {
-		echo "<tr>
-			<td><a href='edit-page/".$page->get_id()."'>".$page->get_title()."</a></td>
-			<td>".$page->get_url()."</td>
-			<td></td>
-		</tr>";
-	}
-} else echo "<tr><td colspan='3'>No pages</td></tr>";
-?>
-			</tbody>
-		</table>
 	</div>
 
     </div> <!-- /container -->

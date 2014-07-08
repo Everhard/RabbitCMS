@@ -6,23 +6,63 @@ class Database {
 	
 	// Get pages:
 	public static function get_pages() {
-		$pages_result = self::$DBH->query("SELECT * FROM pages");
-		while ($page_array = $pages_result->fetchArray()) {
-			$pages[] = new Page($page_array);
-		}
-		return $pages;
+            $pages_result = self::$DBH->query("SELECT * FROM pages");
+            while ($page_array = $pages_result->fetchArray()) {
+                    $pages[] = new Page($page_array);
+            }
+            return $pages;
+	}
+        
+	// Get page:
+	public static function get_page($id) {
+            $page_result = self::$DBH->query("SELECT * FROM pages WHERE id='$id'");
+            if ($page_array = $page_result->fetchArray()) {
+                return $page_array;
+            }
+            return false;
+	}
+        
+	// Update page:
+	public static function update_page($page) {
+            $page_result = self::$DBH->query("UPDATE pages SET
+                url='".$page->get_url()."',
+                title='".$page->get_title()."',
+                text='".$page->get_text()."'
+                WHERE id='".$page->get_id()."'
+            ");
+            
+            if ($page_result) return true;
+            return false;
+	}
+
+	public static function add_page($page) {
+		$pages_result = self::$DBH->query("INSERT INTO pages (url, title, text) VALUES (
+                         '".$page->get_url()."',
+                         '".$page->get_title()."',
+                         '".$page->get_text()."'
+                )");
+		if ($pages_result) return true;
+		return false;
 	}
 	
-	private static $DBH;
+	public static $DBH;
 }
 
 class Page {
-	function __construct($database_array) {
-		$this->id = $database_array['id'];
-		$this->url = $database_array['url'];
-		$this->title = $database_array['title'];
-		$this->text = $database_array['text'];
+	function __construct($database_array = false) {
+            
+		if ($database_array) {
+                    $this->array_to_page_fields($database_array);
+                }
 	}
+        
+        public function load_by_id($id) {
+            if ($page_array = Database::get_page($id)) {
+                $this->array_to_page_fields($page_array);
+                return true;    
+            }
+            return false;
+        }
 	
 	public function get_id() {
 		return $this->id;
@@ -38,6 +78,13 @@ class Page {
 	
 	public function get_text() {
 		return $this->text;
+	}
+        
+        private function array_to_page_fields($database_array) {
+            $this->id = $database_array['id'];
+            $this->url = $database_array['url'];
+            $this->title = $database_array['title'];
+            $this->text = $database_array['text'];
 	}
 	
 	private $id;
@@ -69,5 +116,15 @@ class URLRouter {
 	private $uri_string;
 	private $uri_array;
 	private $parts_count;
+}
+
+class Message {
+    public static function put($type, $text) {
+        self::$text = $text;
+        self::$type = $type;
+    }
+    
+    private static $text;
+    private static $type;
 }
 ?>
