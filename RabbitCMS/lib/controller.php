@@ -1,10 +1,13 @@
 <?php
 class Controller {
 	public static function run() {
+            
+                // Connect to DB:
+                Database::connect();
+            
 		self::$url_router = new URLRouter();
 		self::$view = new View();
-                
-                Database::connect();
+                self::$auth = new Authorization();
                 
                 // Make all actions:
                 Action::make();
@@ -15,6 +18,14 @@ class Controller {
 		
                 // Get template by analyzing URL:
 		self::get_template();
+                
+                // Authorization redirect:
+                if (self::$view->get_template_folder() == 'admin' && !self::$auth->is_admin()) {
+                    if (self::$view->get_template_file() != 'login.php') {
+                        header("Location: /rabbit-control/login");
+                        exit("You must log in to view this page.");
+                    }
+                }
 		
 		// Show front side:
 		self::$view->show();
@@ -27,6 +38,7 @@ class Controller {
                 // Checking if URL points to user page:
                 if ($user_template_file = Database::get_user_template_file(self::$url_router->get_uri_string())) {
                      self::$view->set_template_file($user_template_file);
+                     return true;
                 }
                 
 		
@@ -52,6 +64,11 @@ class Controller {
                                             self::$view->set_template_folder("admin");
                                             self::$view->set_template_file("menus.php");
                                         }
+                                        if ($uri_array[1] == "login") {
+                                            self::$view->set_template_folder("admin");
+                                            self::$view->set_template_file("login.php");
+                                            self::$view->set_template_includes(false);
+                                        }
 				}
 				break;
                         case 3:
@@ -75,13 +92,19 @@ class Controller {
 		}
 	}
         
+        public static function is_admin() {
+            return self::$auth;
+        }
+        
 	private static $url_router;
 	private static $view;
+        private static $auth;
+        
 }
 
 class Action {
     public static function make() {
-        if (!empty($_POST['action-module']) && !empty($_POST['action-method'])) {
+        if (Controller::is_admin() && !empty($_POST['action-module']) && !empty($_POST['action-method'])) {
             $module = addslashes(trim($_POST['action-module']));
             $method = addslashes(trim($_POST['action-method']));
             

@@ -26,6 +26,16 @@ class View {
             return $this->parameter;
         }
         
+        // Get template folder:
+        public function get_template_folder() {
+            return $this->template_folder;
+        }
+	
+        // Get template file:
+	public function get_template_file() {
+		return $this->template_file;
+	}
+        
         // Set template folder:
         public function set_template_folder($template_folder) {
             $this->template_folder = $template_folder;

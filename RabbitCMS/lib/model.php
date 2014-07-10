@@ -137,6 +137,15 @@ class Database {
 		if ($operation_result) return true;
 		return false;
 	}
+        
+        // Get admin password hash:
+        public static function get_admin_password_hash() {
+            $password_result = self::$DBH->query("SELECT field_value FROM settings WHERE field_name='password_hash'");
+            if ($password_array = $password_result->fetchArray()) {
+                return $password_array['field_value'];
+            }
+            return false;
+        }
 	
 	private static $DBH;
 }
@@ -292,5 +301,47 @@ class Message {
     
     private static $text;
     private static $type;
+}
+
+class Authorization {
+    function __construct() {
+        // Check in session:
+        if (!empty($_SESSION['passhash'])) {
+            $this->passhash = addslashes(trim($_SESSION['passhash']));
+            if ($this->check()) {
+                $this->is_admin = true;
+            }
+        }
+        // Check in POST data:
+        if (!empty($_POST['password'])) {
+            $this->passhash = md5(addslashes(trim($_POST['password'])));
+            if ($this->check()) {
+                $this->is_admin = true;
+                $this->save_session();
+                // Redirect:
+                header("Location: /rabbit-control");
+                exit("Redirecting to main admin page...");
+            }
+        }
+        return false;
+    }
+    
+    public function is_admin() {
+        return $this->is_admin;
+    }
+    
+    private function check() {
+        if ($this->passhash == Database::get_admin_password_hash()) {
+            return true;
+        }
+        return false;
+    }
+    
+    private function save_session() {
+        $_SESSION['passhash'] = $this->passhash;
+    }
+    
+    private $passhash;
+    private $is_admin = false;
 }
 ?>
