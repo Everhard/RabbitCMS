@@ -30,17 +30,17 @@ class Controller {
 		// Show front side:
 		self::$view->show();
 	}
-	
+
 	private static function get_template() {
 	
 		$uri_array = self::$url_router->get_uri_array();
                 
                 // Checking if URL points to user page:
-                if ($user_template_file = Database::get_user_template_file(self::$url_router->get_uri_string())) {
-                     self::$view->set_template_file($user_template_file);
+                if ($page = Database::get_page_by_url(self::$url_router->get_uri_string())) {
+                     self::$view->set_template_file($page->get_template());
+                     self::$view->set_content($page);
                      return true;
                 }
-                
 		
                 // Checking if URL points to admin page:
 		switch (self::$url_router->get_parts_count())  {
@@ -77,14 +77,14 @@ class Controller {
                                             if (is_numeric($uri_array[2])) {
                                                 self::$view->set_template_folder("admin");
                                                 self::$view->set_template_file("edit-page.php");
-                                                self::$view->set_parameter($uri_array[2]);
+                                                self::$view->set_content($uri_array[2]);
                                             }
                                         }
                                        if ($uri_array[1] == "menu-items") {
                                             if (is_numeric($uri_array[2])) {
                                                 self::$view->set_template_folder("admin");
                                                 self::$view->set_template_file("menu-items.php");
-                                                self::$view->set_parameter($uri_array[2]);
+                                                self::$view->set_content($uri_array[2]);
                                             }
                                         }
 				}

@@ -20,11 +20,6 @@ class View {
                 require_once($this->site_path.'/'.$this->template_folder.'/includes/footer.php');
             }
 	}
-
-        // Get parameter:
-        public function get_parameter() {
-            return $this->parameter;
-        }
         
         // Get template folder:
         public function get_template_folder() {
@@ -36,6 +31,16 @@ class View {
 		return $this->template_file;
 	}
         
+        // Get output content:
+        public function get_content() {
+            return $this->content;
+        }
+        
+        // Set output content:
+        public function set_content($content) {
+            $this->content = $content;
+        }
+        
         // Set template folder:
         public function set_template_folder($template_folder) {
             $this->template_folder = $template_folder;
@@ -45,11 +50,6 @@ class View {
 	public function set_template_file($template_file) {
 		$this->template_file = $template_file;
 	}
-        
-        // Set parameter:
-        public function set_parameter($parameter) {
-            $this->parameter = $parameter;
-        }
         
         public function set_template_includes($value) {
             $this->template_includes = $value;
@@ -65,10 +65,10 @@ class View {
         // Template folder:
 	private $template_folder;
         
-        // Parameter from URL:
-        private $parameter;
-        
         // Header and footer includes flag:
         private $template_includes = true;
+        
+        // Output content:
+        private $content;
 }
 ?>

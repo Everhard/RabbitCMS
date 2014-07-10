@@ -1,6 +1,6 @@
 <?php
     $menu = new Menu();
-    $menu->load_by_id($this->get_parameter());
+    $menu->load_by_id($this->get_content());
 ?>
 <div class="container">
 

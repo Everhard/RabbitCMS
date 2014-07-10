@@ -1,16 +1,19 @@
 <?php
 class Database {
 	public static function connect() {
+                if (!file_exists("rabbitcms.sqlite")) {
+                    exit("Please install RabbitCMS first!");
+                }
 		self::$DBH = new SQLite3("rabbitcms.sqlite");
 	}
         
         // Get user template file:
-        public static function get_user_template_file($url) {
+        public static function get_page_by_url($url) {
             if ($url != "_frontpage_") {
                 if (!$url) $url = "_frontpage_";
-                $page_result = self::$DBH->query("SELECT template FROM pages WHERE url='$url'");
+                $page_result = self::$DBH->query("SELECT * FROM pages WHERE url='$url'");
                 if ($page_array = $page_result->fetchArray()) {
-                    return $page_array['template'];
+                    return new Page($page_array);
                 }
             }
             return false;
@@ -84,6 +87,15 @@ class Database {
 	// Get menu:
 	public static function get_menu($id) {
             $menu_result = self::$DBH->query("SELECT * FROM menus WHERE id='$id'");
+            if ($menu_array = $menu_result->fetchArray()) {
+                return $menu_array;
+            }
+            return false;
+	}
+        
+	// Get menu:
+	public static function get_menu_by_tag($tag) {
+            $menu_result = self::$DBH->query("SELECT * FROM menus WHERE tag='$tag'");
             if ($menu_array = $menu_result->fetchArray()) {
                 return $menu_array;
             }
@@ -218,6 +230,14 @@ class Menu {
         return false;
     }
     
+    public function load_by_tag($tag) {
+        if ($menu_array = Database::get_menu_by_tag($tag)) {
+            $this->array_to_menu_fields($menu_array);
+            return true;    
+        }
+        return false;
+    }
+    
     public function get_items() {
         return Database::get_menu_items($this->id);
     }
@@ -273,6 +293,22 @@ class MenuItem {
     private $menu_id;
     private $name;
     private $url;
+}
+
+class HTMLMenu {
+    public static function show($tag) {
+        
+        // Get menu:
+        $menu = new Menu;
+        $menu->load_by_tag($tag);
+        $items = $menu->get_items();
+        
+        // Form HTML:
+        foreach ($items as $item) {
+            echo "<li><a href='".$item->get_url()."'>".$item->get_name()."</a></li>\n";
+        }
+        
+    }
 }
 
 class URLRouter {

@@ -1,6 +1,6 @@
 <?php
     $page = new Page();
-    $page->load_by_id($this->get_parameter());
+    $page->load_by_id($this->get_content());
 ?>
 <div class="container">
 
