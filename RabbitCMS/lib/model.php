@@ -52,10 +52,11 @@ class Database {
 	}
 
 	public static function add_page($page) {
-		$pages_result = self::$DBH->query("INSERT INTO pages (url, title, text) VALUES (
+		$pages_result = self::$DBH->query("INSERT INTO pages (url, title, text, template) VALUES (
                          '".$page->get_url()."',
                          '".$page->get_title()."',
-                         '".$page->get_text()."'
+                         '".$page->get_text()."',
+                         '".$page->get_template()."'
                 )");
 		if ($pages_result) return true;
 		return false;
@@ -182,17 +183,23 @@ class Page {
 		return $this->text;
 	}
         
+	public function get_template() {
+		return $this->template;
+	}
+        
         private function array_to_page_fields($database_array) {
             $this->id = $database_array['id'];
             $this->url = $database_array['url'];
             $this->title = $database_array['title'];
             $this->text = $database_array['text'];
+            $this->template = $database_array['template'];
 	}
 	
 	private $id;
 	private $url;
 	private $title;
 	private $text;
+        private $template;
 }
 
 class Menu {

@@ -93,7 +93,7 @@ class Controller {
 	}
         
         public static function is_admin() {
-            return self::$auth;
+            return self::$auth->is_admin();
         }
         
 	private static $url_router;
@@ -120,10 +120,11 @@ class Action {
 
 class ActionPage {
     public static function add_page() {
-        if (!empty($_POST['title']) && isset($_POST['url']) && !empty($_POST['text'])) {
+        if (!empty($_POST['title']) && isset($_POST['url']) && !empty($_POST['text']) && !empty($_POST['template'])) {
             $title = addslashes(trim($_POST['title']));
             $url = addslashes(trim($_POST['url']));
             $text = addslashes(trim($_POST['text']));
+            $template = addslashes(trim($_POST['template']));
             
             Message::put("danger", "Ошибка добавления страницы!");
             
@@ -131,7 +132,8 @@ class ActionPage {
                 "id" => '',
                 "title" => $title,
                 "url" => $url,
-                "text" => $text
+                "text" => $text,
+                "template" => $template
             )))) Message::put("success", "Страница была успешно добавлена!");
         }
     }

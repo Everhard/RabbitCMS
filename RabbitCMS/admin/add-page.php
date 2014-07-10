@@ -6,12 +6,16 @@
                 <form role="form" action="pages" method="post">
                     <div class="form-group">
                       <label>Page title:</label>
-                      <input name="title" type="text" class="form-control" placeholder='For example, "How to loose weight"...'>
+                      <input name="title" type="text" class="form-control">
                     </div>
                     <div class="form-group">
                       <label>URL-name of the page:</label>
-                      <input name="url" type="text" class="form-control" placeholder='For example, "how-to-loose-weight"'>
+                      <input name="url" type="text" class="form-control">
                       <p class="help-block">You will got: http://site.com/how-to-loose-weight</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Template file:</label>
+                      <input name="template" type="text" class="form-control">
                     </div>
                     <div class="form-group">
                       <label>Text of the page:</label>
