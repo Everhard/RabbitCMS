@@ -13,8 +13,7 @@ class Controller {
                 Action::make();
 		
 		// Default template:
-                self::$view->set_template_folder("template");
-                self::$view->set_template_file("not-found.php");
+                self::$view->set_not_found_template();
 		
                 // Get template by analyzing URL:
 		self::get_template();

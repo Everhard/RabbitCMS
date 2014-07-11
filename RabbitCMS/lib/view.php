@@ -7,6 +7,13 @@ class View {
         // Show template:
 	public function show() {
             
+            if ($this->not_found) {
+                header("HTTP/1.1 404 Not Found");
+                $this->set_template_includes(false);
+                $this->set_template_folder("admin");
+                $this->set_template_file("not-found.php");
+            }
+            
             // Include header:
             if ($this->template_includes) {
                 require_once($this->site_path.'/'.$this->template_folder.'/includes/header.php');
@@ -48,6 +55,7 @@ class View {
 	
         // Set template file:
 	public function set_template_file($template_file) {
+                $this->not_found = false;
 		$this->template_file = $template_file;
 	}
         
@@ -55,7 +63,13 @@ class View {
             $this->template_includes = $value;
         }
         
+        public function set_not_found_template() {
+            $this->not_found = true;
+        }
 
+        // Not found flag:
+        private $not_found = false;
+        
         // Path, where located root index.php:
 	private $site_path;
         
