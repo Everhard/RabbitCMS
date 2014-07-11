@@ -1,3 +1,4 @@
+<?php defined('_RabbitCMS') or die('Restricted access'); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>

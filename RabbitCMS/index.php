@@ -1,4 +1,6 @@
 <?php
+define("_RabbitCMS", true);
+
 // Start session:
 session_start();
 

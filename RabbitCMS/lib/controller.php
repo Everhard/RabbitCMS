@@ -1,4 +1,6 @@
 <?php
+defined('_RabbitCMS') or die('Restricted access');
+
 class Controller {
 	public static function run() {
             

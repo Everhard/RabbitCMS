@@ -1,4 +1,6 @@
 <?php
+defined('_RabbitCMS') or die('Restricted access');
+
 class View {
 	function __construct() {
 		$this->site_path = getcwd();

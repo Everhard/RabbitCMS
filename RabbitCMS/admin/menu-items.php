@@ -1,4 +1,5 @@
 <?php
+    defined('_RabbitCMS') or die('Restricted access');
     $menu = new Menu();
     $menu->load_by_id($this->get_content());
 ?>

@@ -1,3 +1,4 @@
+<?php defined('_RabbitCMS') or die('Restricted access'); ?>
 <div class="container">
 
     <div class="panel panel-default">

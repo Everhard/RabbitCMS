@@ -1,4 +1,5 @@
 <?php
+    defined('_RabbitCMS') or die('Restricted access');
     $page = new Page();
     $page->load_by_id($this->get_content());
 ?>

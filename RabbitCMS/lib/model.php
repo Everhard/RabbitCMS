@@ -1,4 +1,6 @@
 <?php
+defined('_RabbitCMS') or die('Restricted access');
+
 class Database {
 	public static function connect() {
                 if (!file_exists("rabbitcms.sqlite")) {
