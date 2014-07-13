@@ -38,6 +38,7 @@ class Controller {
                 
                 // Checking if URL points to user page:
                 if ($page = Database::get_page_by_url(self::$url_router->get_uri_string())) {
+                     self::$view->set_template_folder("template");
                      self::$view->set_template_file($page->get_template());
                      self::$view->set_content($page);
                      return true;
@@ -106,8 +107,8 @@ class Controller {
 class Action {
     public static function make() {
         if (Controller::is_admin() && !empty($_POST['action-module']) && !empty($_POST['action-method'])) {
-            $module = addslashes(trim($_POST['action-module']));
-            $method = addslashes(trim($_POST['action-method']));
+            $module = trim($_POST['action-module']);
+            $method = trim($_POST['action-method']);
             
             $method = str_replace("-", "_", $method);
             
@@ -122,10 +123,10 @@ class Action {
 class ActionPage {
     public static function add_page() {
         if (!empty($_POST['title']) && isset($_POST['url']) && !empty($_POST['text']) && !empty($_POST['template'])) {
-            $title = addslashes(trim($_POST['title']));
-            $url = addslashes(trim($_POST['url']));
-            $text = addslashes(trim($_POST['text']));
-            $template = addslashes(trim($_POST['template']));
+            $title = trim($_POST['title']);
+            $url = trim($_POST['url']);
+            $text = trim($_POST['text']);
+            $template = trim($_POST['template']);
             
             Message::put("danger", "Ошибка добавления страницы!");
             
@@ -140,11 +141,12 @@ class ActionPage {
     }
     
     public static function update_page() {
-        if (!empty($_POST['id']) && !empty($_POST['title']) && !empty($_POST['url']) && !empty($_POST['text'])) {
-            $id = addslashes(trim($_POST['id']));
-            $title = addslashes(trim($_POST['title']));
-            $url = addslashes(trim($_POST['url']));
-            $text = addslashes(trim($_POST['text']));
+        if (!empty($_POST['id']) && !empty($_POST['title']) && !empty($_POST['url']) && !empty($_POST['text']) && !empty($_POST['template'])) {
+            $id = trim($_POST['id']);
+            $title = trim($_POST['title']);
+            $url = trim($_POST['url']);
+            $text = trim($_POST['text']);
+            $template = trim($_POST['template']);
             
             Message::put("danger", "Ошибка изменения страницы!");
             
@@ -152,14 +154,15 @@ class ActionPage {
                 "id" => $id,
                 "title" => $title,
                 "url" => $url,
-                "text" => $text
+                "text" => $text,
+                "template" => $template
             )))) Message::put("success", "Страница была успешно обновлена!");
         }
     }
     
     public static function delete_page() {
         if (!empty($_POST['id'])) {
-            $id = addslashes(trim($_POST['id']));
+            $id = trim($_POST['id']);
             
             Message::put("danger", "Ошибка удаления страницы!");
             
@@ -173,8 +176,8 @@ class ActionPage {
 class ActionMenu {
     public static function add_menu() {
         if (!empty($_POST['name']) && !empty($_POST['tag'])) {
-            $name = addslashes(trim($_POST['name']));
-            $tag = addslashes(trim($_POST['tag']));
+            $name = trim($_POST['name']);
+            $tag = trim($_POST['tag']);
             
              Message::put("danger", "Ошибка добавления меню!");
             
@@ -188,7 +191,7 @@ class ActionMenu {
     
     public static function delete_menu() {
         if (!empty($_POST['id'])) {
-            $id = addslashes(trim($_POST['id']));
+            $id = trim($_POST['id']);
             
             Message::put("danger", "Ошибка удаления меню!");
             
@@ -202,9 +205,9 @@ class ActionMenu {
 class ActionMenuItem {
     public static function add_item() {
         if (!empty($_POST['menu_id']) && !empty($_POST['name']) && !empty($_POST['url'])) {
-            $menu_id = addslashes(trim($_POST['menu_id']));
-            $name = addslashes(trim($_POST['name']));
-            $url = addslashes(trim($_POST['url']));
+            $menu_id = trim($_POST['menu_id']);
+            $name = trim($_POST['name']);
+            $url = trim($_POST['url']);
             
              Message::put("danger", "Ошибка добавления пункта меню!");
             
@@ -219,7 +222,7 @@ class ActionMenuItem {
     
     public static function delete_item() {
         if (!empty($_POST['id'])) {
-            $id = addslashes(trim($_POST['id']));
+            $id = trim($_POST['id']);
             
             Message::put("danger", "Ошибка удаления пункта меню!");
             

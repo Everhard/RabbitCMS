@@ -45,25 +45,25 @@ class Database {
         
 	// Update page:
 	public static function update_page($page) {
-            $page_result = self::$DBH->query("UPDATE pages SET
-                url='".$page->get_url()."',
-                title='".$page->get_title()."',
-                text='".$page->get_text()."'
-                WHERE id='".$page->get_id()."'
-            ");
-            
-            if ($page_result) return true;
-            return false;
+                $stmt = self::$DBH->prepare("UPDATE pages SET url=:url, title=:title, text=:text, template=:template WHERE id=:id");
+                $stmt->bindValue(':id', $page->get_id());
+                $stmt->bindValue(':url', $page->get_url());
+                $stmt->bindValue(':title', $page->get_title());
+                $stmt->bindValue(':text', $page->get_text());
+                $stmt->bindValue(':template', $page->get_template());
+                $page_result = $stmt->execute();
+		if ($page_result) return true;
+		return false;
 	}
 
 	public static function add_page($page) {
-		$pages_result = self::$DBH->query("INSERT INTO pages (url, title, text, template) VALUES (
-                         '".$page->get_url()."',
-                         '".$page->get_title()."',
-                         '".$page->get_text()."',
-                         '".$page->get_template()."'
-                )");
-		if ($pages_result) return true;
+		$stmt = self::$DBH->prepare("INSERT INTO pages (url, title, text, template) VALUES (:url,:title,:text,:template)");
+                $stmt->bindValue(':url', $page->get_url());
+                $stmt->bindValue(':title', $page->get_title());
+                $stmt->bindValue(':text', $page->get_text());
+                $stmt->bindValue(':template', $page->get_template());
+                $page_result = $stmt->execute();
+		if ($page_result) return true;
 		return false;
 	}
         
@@ -134,7 +134,7 @@ class Database {
             }
             return false;
 	}
-        
+
         // Add menu item:
         public static function add_menu_item($menu_item) {
             $item_result = self::$DBH->query("INSERT INTO menuitems (menu_id, name, url) VALUES (
@@ -205,7 +205,7 @@ class Page {
             $this->id = $database_array['id'];
             $this->url = $database_array['url'];
             $this->title = $database_array['title'];
-            $this->text = $database_array['text'];
+            $this->text = stripslashes($database_array['text']);
             $this->template = $database_array['template'];
 	}
 	
@@ -352,14 +352,14 @@ class Authorization {
     function __construct() {
         // Check in session:
         if (!empty($_SESSION['passhash'])) {
-            $this->passhash = addslashes(trim($_SESSION['passhash']));
+            $this->passhash = trim($_SESSION['passhash']);
             if ($this->check()) {
                 $this->is_admin = true;
             }
         }
         // Check in POST data:
         if (!empty($_POST['password'])) {
-            $this->passhash = md5(addslashes(trim($_POST['password'])));
+            $this->passhash = md5(trim($_POST['password']));
             if ($this->check()) {
                 $this->is_admin = true;
                 $this->save_session();

@@ -6,7 +6,7 @@
 <div class="container">
 
     <div class="panel panel-default">
-        <div class="panel-heading">Menus / <strong><?php echo $menu->get_name(); ?></strong></div>
+        <div class="panel-heading"><a href="../menus">Menus</a> / <strong><?php echo $menu->get_name(); ?></strong></div>
             <div class="panel-body">
                     <a class='btn btn-default' data-toggle="modal" data-target="#add-menu-item">Add item</a>
             </div>

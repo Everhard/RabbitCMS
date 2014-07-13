@@ -19,6 +19,10 @@
                       <p class="help-block">You will got: http://site.com/how-to-loose-weight</p>
                     </div>
                     <div class="form-group">
+                      <label>Template file:</label>
+                      <input name="template" value="<?php echo $page->get_template(); ?>" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
                       <label>Text of the page:</label>
                       <textarea name="text" class="form-control" rows="15"><?php echo $page->get_text(); ?></textarea>
                     </div>
