@@ -66,6 +66,10 @@ class Controller {
                                             self::$view->set_template_folder("admin");
                                             self::$view->set_template_file("menus.php");
                                         }
+                                        if ($uri_array[1] == "journal") {
+                                            self::$view->set_template_folder("admin");
+                                            self::$view->set_template_file("journal.php");
+                                        }
                                         if ($uri_array[1] == "login") {
                                             self::$view->set_template_folder("admin");
                                             self::$view->set_template_file("login.php");
@@ -230,6 +234,12 @@ class ActionMenuItem {
                 Message::put("success", "Пункт меню был успешно удаленён!");
             }
         }
+    }
+}
+
+class ActionJournal {
+    public static function clear() {
+        Database::clear_journal();
     }
 }
 ?>

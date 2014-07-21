@@ -26,4 +26,7 @@ $(document).ready(function() {
     $("#add-menu-item-button").click(function() {
         $("#add-menu-item-form").submit();
     });
+    $("#clear-journal-button").click(function() {
+        $("#clear-journal-form").submit();
+    });
 });

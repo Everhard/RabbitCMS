@@ -31,6 +31,16 @@ if (isset($_GET['thank-you!'])) {
         PRIMARY KEY ("id")
     )');
     
+    // Creating journal table:
+    $result = $DBH->query('CREATE TABLE "journal" (
+        "id" INTEGER NOT NULL,
+        "message" TEXT NOT NULL,
+        "ip" TEXT NOT NULL,
+        "browser" TEXT NOT NULL,
+        "time" INTEGER NOT NULL,
+        PRIMARY KEY ("id")
+    )');
+    
     // Creating settings table:
     $result = $DBH->query('CREATE TABLE "settings" (
         "field_name" TEXT NOT NULL,

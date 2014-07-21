@@ -14,6 +14,7 @@ class View {
                 $this->set_template_includes(false);
                 $this->set_template_folder("admin");
                 $this->set_template_file("not-found.php");
+                Journal::log_404();
             }
             
             // Include header:

@@ -161,6 +161,32 @@ class Database {
             }
             return false;
         }
+        
+        public static function put_journal_message($message, $ip, $browser) {
+            $stmt = self::$DBH->prepare("INSERT INTO journal (message, ip, browser, time) VALUES (:message,:ip,:browser,:time)");
+            $stmt->bindValue(':message', $message);
+            $stmt->bindValue(':ip', $ip);
+            $stmt->bindValue(':browser', $browser);
+            $stmt->bindValue(':time', time());
+            $insert_result = $stmt->execute();
+            if ($insert_result) return true;
+            return false;
+        }
+        
+        public static function get_journal_records() {
+            $stmt = self::$DBH->prepare("SELECT * FROM journal ORDER BY time DESC");
+            $records_result = $stmt->execute();
+            $records = array();
+            while ($record_array = $records_result->fetchArray(SQLITE3_ASSOC)){ 
+                $records[] = new JournalRecord($record_array);
+            }
+            return $records;
+        }
+        
+        public static function clear_journal() {
+            $stmt = self::$DBH->prepare("DELETE FROM journal");
+            return $stmt->execute();
+        }
 	
 	private static $DBH;
 }
@@ -388,5 +414,61 @@ class Authorization {
     
     private $passhash;
     private $is_admin = false;
+}
+
+class Journal {
+    public static function log_404() {
+        $message = "Page not found: $_SERVER[REQUEST_URI]";
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $browser = $_SERVER['HTTP_USER_AGENT'];
+        Database::put_journal_message($message, $ip, $browser);
+    }
+    
+    public static function get_records() {
+        return Database::get_journal_records();
+    }
+}
+
+class JournalRecord {
+    
+    function __construct($data) {
+        if (is_array($data)) {
+            $this->array_to_object_fields($data);
+        }
+    }
+    
+    private function array_to_object_fields($data_array) {
+        $this->id = $data_array['id'];
+        $this->message = $data_array['message'];
+        $this->ip = $data_array['ip'];
+        $this->browser = $data_array['browser'];
+        $this->time = $data_array['time'];
+    }
+    
+    public function get_id() {
+        return $this->id;
+    }
+    
+    public function get_message() {
+        return $this->message;
+    }
+    
+    public function get_ip() {
+        return $this->ip;
+    }
+    
+    public function get_browser() {
+        return $this->browser;
+    }
+    
+    public function get_time() {
+        return $this->time;
+    }
+
+    private $id;
+    private $message;
+    private $ip;
+    private $browser;
+    private $time;
 }
 ?>
