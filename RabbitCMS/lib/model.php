@@ -365,6 +365,13 @@ class URLRouter {
 }
 
 class Message {
+    
+    public static function show() {
+        if (isset(self::$text)) {
+            echo "<div class='alert alert-".self::$type."' role='alert'>".self::$text."</div>";
+        }
+    }
+    
     public static function put($type, $text) {
         self::$text = $text;
         self::$type = $type;

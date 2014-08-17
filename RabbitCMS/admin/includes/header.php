@@ -39,6 +39,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
+                <li><a href="/rabbit-control/template">Template installation</a></li>
                 <li><a href="#">Change password</a></li>
               </ul>
             </li>

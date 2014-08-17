@@ -66,6 +66,10 @@ class Controller {
                                             self::$view->set_template_folder("admin");
                                             self::$view->set_template_file("menus.php");
                                         }
+                                        if ($uri_array[1] == "template") {
+                                            self::$view->set_template_folder("admin");
+                                            self::$view->set_template_file("template.php");
+                                        }
                                         if ($uri_array[1] == "journal") {
                                             self::$view->set_template_folder("admin");
                                             self::$view->set_template_file("journal.php");
@@ -120,6 +124,24 @@ class Action {
                 call_user_func(array("Action$module", $method));
             }
             
+        }
+    }
+}
+
+class ActionTemplate {
+    public static function install() {
+        if (isset($_FILES['template'])) {
+            Message::put("danger", "Ошибка установки шаблона!");
+            $current_path = getcwd();
+            shell_exec("rm template/ -rf");
+            mkdir($current_path."/template");
+            if (move_uploaded_file($_FILES['template']['tmp_name'], $current_path."/template/template.zip")) {
+                chdir("template");
+                if (shell_exec("unzip template.zip")) {
+                    unlink("template.zip");
+                    Message::put("success", "Template installed successfully!");
+                }
+            }
         }
     }
 }
