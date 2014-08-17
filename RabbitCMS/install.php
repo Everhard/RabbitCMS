@@ -1,6 +1,6 @@
 <?php
 // Install RabbitCMS:
-if (isset($_GET['thank-you!'])) {
+if (isset($_POST['install'])) {
 
     $DBH = new SQLite3("rabbitcms.sqlite");
 
@@ -47,8 +47,11 @@ if (isset($_GET['thank-you!'])) {
         "field_value" TEXT NOT NULL
     )');
     
-    $result = $DBH->query("INSERT INTO settings (field_name, field_value) VALUES ('password_hash', '".md5('password')."')");
+    $password = PasswordGenerator::get_password();
     
+    $result = $DBH->query("INSERT INTO settings (field_name, field_value) VALUES ('password_hash', '".md5($password)."')");
+    
+    unlink("install.php");
 }
 ?>
 <!DOCTYPE html>
@@ -61,10 +64,7 @@ if (isset($_GET['thank-you!'])) {
     <title>RabbitCMS</title>
     <!-- Bootstrap core CSS -->
     <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/admin/css/custom.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="navbar-fixed-top.css" rel="stylesheet">
+    <link href="/admin/css/custom.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -78,11 +78,17 @@ if (isset($_GET['thank-you!'])) {
     <div class="container">
       <div class="jumbotron">
         <h1>RabbitCMS</h1>
+<?php if (isset($_POST['install'])) { ?>
+        <p>RabbitCMS successfully installed!</p>
+        <p>Admin password: <strong><?php echo $password; ?></strong></p>
+        <a href="/rabbit-control" class="btn btn-lg btn-primary">Go to admin panel &raquo;</a>
+<?php } else { ?>
         <p>To install this content management system just click the button below.</p>
         <p>Yes, just click the button.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="install.php?thank-you!" role="button">Install &raquo;</a>
-        </p>
+        <form method="post">
+            <input type="submit" name="install" class="btn btn-lg btn-primary" value="Install &raquo;">
+        </form>
+<?php } ?>
       </div>
 
     </div>
@@ -94,3 +100,26 @@ if (isset($_GET['thank-you!'])) {
     <script src="/admin/js/custom.js"></script>
   </body>
 </html>
+
+<?php
+class PasswordGenerator {
+    public static function get_password($length = 20) {
+        $password = '';
+        for ($i = 0; $i < $length; $i++) {
+            $current_index = rand(0, count(self::$symbols) - 1);
+            $character = self::$symbols[$current_index];
+            
+            if (!is_numeric($character)) {
+                if (rand(0, 1)) $character = strtoupper($character);
+            }
+            
+            $password .= $character;
+        }
+        return $password;
+    }
+    
+    private static $symbols = array(
+        "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"
+    );
+}
+?>
