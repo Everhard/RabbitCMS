@@ -12,7 +12,7 @@
                     <div class="form-group">
                       <label>URL-name of the page:</label>
                       <input name="url" type="text" class="form-control">
-                      <p class="help-block">You will got: http://site.com/how-to-loose-weight</p>
+                      <p class="help-block">You will got: http://<?php echo $_SERVER['HTTP_HOST']; ?>/<span></span></p>
                     </div>
                     <div class="form-group">
                       <label>Template file:</label>
