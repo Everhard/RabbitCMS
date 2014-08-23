@@ -33,11 +33,11 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/rabbit-control">Statistics</a></li>
-            <li><a href="/rabbit-control/pages">Pages</a></li>
-            <li><a href="/rabbit-control/menus">Menus</a></li>
+            <li><a href="/rabbit-control"><span class="glyphicon glyphicon-stats"></span> Statistics</a></li>
+            <li><a href="/rabbit-control/pages"><span class="glyphicon glyphicon-file"></span> Pages</a></li>
+            <li><a href="/rabbit-control/menus"><span class="glyphicon glyphicon-list"></span> Menus</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Settings <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="/rabbit-control/template">Template installation</a></li>
                 <li><a href="#">Change password</a></li>
@@ -45,8 +45,8 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/rabbit-control/journal">Logs</a></li>
-            <li><a href="#">Exit</a></li>
+            <li><a href="/rabbit-control/journal"><span class="glyphicon glyphicon-hdd"></span> Logs</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-arrow-up"></span> Exit</a></li>
           </ul>
         </div>
       </div>
